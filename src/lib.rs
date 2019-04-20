@@ -14,6 +14,8 @@
 
 #![no_std]
 
+#![deny(missing_docs)]
+
 
 pub use embedded_hal;
 pub use nb;
