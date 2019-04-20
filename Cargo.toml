@@ -4,6 +4,18 @@ version = "0.1.0"
 authors = ["Hanno Braun <hanno@braun-robotics.com>"]
 edition = "2018"
 
+description = "Macros for working with timeouts on top of embedded-hal APIs"
+documentation = "https://docs.rs/embedded-timeout-macros"
+repository    = "https://github.com/braun-robotics/rust-embedded-timeout-macros"
+license       = "0BSD"
+readme        = "README.md"
+categories    = ["embedded", "no-std"]
+keywords      = ["embedded-hal", "timeout", "timer", "macro"]
+
+[badges]
+travis-ci = { repository = "braun-robotics/rust-embedded-timeout-macros" }
+
+
 [dependencies]
 embedded-hal = "0.2.2"
 nb           = "0.1.1"
