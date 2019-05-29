@@ -33,7 +33,7 @@ This project is open source software, licensed under the terms of the [Zero Clau
 See [LICENSE] for full details.
 
 [Zero Clause BSD License]: https://opensource.org/licenses/FPL-1.0.0
-[LICENSE]: https://github.com/braun-robotics/rust-embedded-timeout-macros/blob/master/LICENSE
+[LICENSE]: https://github.com/braun-embedded/rust-embedded-timeout-macros/blob/master/LICENSE
 
 
 **Supported by [Braun Robotics](https://braun-robotics.com/)**
