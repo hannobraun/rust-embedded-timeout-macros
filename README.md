@@ -1,4 +1,4 @@
-# Rust Embedded Timeout Macros [![crates.io](https://img.shields.io/crates/v/embedded-timeout-macros.svg)](https://crates.io/crates/embedded-timeout-macros) [![Documentation](https://docs.rs/embedded-timeout-macros/badge.svg)](https://docs.rs/embedded-timeout-macros) [![Build Status](https://travis-ci.com/braun-robotics/rust-embedded-timeout-macros.svg?branch=master)](https://travis-ci.org/braun-robotics/rust-embedded-timeout-macros)
+# Rust Embedded Timeout Macros [![crates.io](https://img.shields.io/crates/v/embedded-timeout-macros.svg)](https://crates.io/crates/embedded-timeout-macros) [![Documentation](https://docs.rs/embedded-timeout-macros/badge.svg)](https://docs.rs/embedded-timeout-macros) [![Build Status](https://travis-ci.com/braun-embedded/rust-embedded-timeout-macros.svg?branch=master)](https://travis-ci.com/braun-embedded/rust-embedded-timeout-macros)
 
 ## Introduction
 
@@ -33,7 +33,7 @@ This project is open source software, licensed under the terms of the [Zero Clau
 See [LICENSE] for full details.
 
 [Zero Clause BSD License]: https://opensource.org/licenses/FPL-1.0.0
-[LICENSE]: https://github.com/braun-robotics/rust-embedded-timeout-macros/blob/master/LICENSE
+[LICENSE]: https://github.com/braun-embedded/rust-embedded-timeout-macros/blob/master/LICENSE
 
 
-**Supported by [Braun Robotics](https://braun-robotics.com/)**
+**Supported by [Braun Embedded](https://braun-embedded.com/)**
