@@ -36,4 +36,4 @@ See [LICENSE] for full details.
 [LICENSE]: https://github.com/braun-embedded/rust-embedded-timeout-macros/blob/master/LICENSE
 
 
-**Supported by [Braun Robotics](https://braun-robotics.com/)**
+**Supported by [Braun Embedded](https://braun-embedded.com/)**
