@@ -1,4 +1,4 @@
-# Rust Embedded Timeout Macros [![crates.io](https://img.shields.io/crates/v/embedded-timeout-macros.svg)](https://crates.io/crates/embedded-timeout-macros) [![Documentation](https://docs.rs/embedded-timeout-macros/badge.svg)](https://docs.rs/embedded-timeout-macros) [![Build Status](https://travis-ci.com/braun-embedded/rust-embedded-timeout-macros.svg?branch=master)](https://travis-ci.org/braun-embedded/rust-embedded-timeout-macros)
+# Rust Embedded Timeout Macros [![crates.io](https://img.shields.io/crates/v/embedded-timeout-macros.svg)](https://crates.io/crates/embedded-timeout-macros) [![Documentation](https://docs.rs/embedded-timeout-macros/badge.svg)](https://docs.rs/embedded-timeout-macros) [![Build Status](https://travis-ci.com/braun-embedded/rust-embedded-timeout-macros.svg?branch=master)](https://travis-ci.com/braun-embedded/rust-embedded-timeout-macros)
 
 ## Introduction
 
