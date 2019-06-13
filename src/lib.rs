@@ -78,7 +78,7 @@ macro_rules! block_timeout {
         {
             use $crate::embedded_hal::prelude::*;
 
-            // Make sure the timer has the right type. If it isn't, the user
+            // Make sure the timer has the right type. If it hasn't, the user
             // should at least get a good error message.
             fn check_type<T>(_: &mut T)
                 where T: $crate::embedded_hal::timer::CountDown {}
@@ -175,7 +175,7 @@ macro_rules! repeat_timeout {
         {
             use $crate::embedded_hal::prelude::*;
 
-            // Make sure the timer has the right type. If it isn't, the user
+            // Make sure the timer has the right type. If it hasn't, the user
             // should at least get a good error message.
             fn check_type<T>(_: &mut T)
                 where T: $crate::embedded_hal::timer::CountDown {}
