@@ -78,7 +78,7 @@ macro_rules! block_timeout {
         {
             use $crate::embedded_hal::prelude::*;
 
-            // Make sure the timer has the right type. If it isn't, the user
+            // Make sure the timer has the right type. If it hasn't, the user
             // should at least get a good error message.
             fn check_type<T>(_: &mut T)
                 where T: $crate::embedded_hal::timer::CountDown {}
@@ -113,15 +113,20 @@ macro_rules! block_timeout {
 ///
 /// - A timer that implements `embedded_hal::timer::CountDown`
 /// - An expression that evaluates to `Result<T, E>` (the operation)
-/// - A closure that will be called every time the operation succeeds
-///   This closure is expected to take an argument of type `T`. The return value
-///   is ignored.
-/// - A closure that will be called every time the operation fails
-///   This closure is expected to take an argument of type `E`. The return value
-///   is ignored.
+/// - A pseudo-closure that will be called every time the operation succeeds
+///   This pseudo-closure is expected to take an argument of type `T`. The
+///   return value is ignored.
+/// - A pseudo-closure that will be called every time the operation fails
+///   This pseudo-closure is expected to take an argument of type `E`. The
+///   return value is ignored.
 ///
-/// This will keep repeating the operation until the timer runs out, no matter
-/// whether it suceeds or fails.
+/// `repeat_timeout!` will keep repeating the operation until the timer runs
+/// out, no matter whether it suceeds or fails.
+///
+/// It uses a `loop` to do that, which is `break`s from when the timer runs out.
+/// Any of the expressions passed into the macro, the main expression, as well
+/// as the two pseudo-closures, can employ `break` and `continue` to manipulate
+/// that loop.
 ///
 /// # Example
 ///
@@ -144,7 +149,7 @@ macro_rules! block_timeout {
 /// repeat_timeout!(
 ///     &mut timer,
 ///     {
-///         // The macro will keep evaluation this expression repeatedly until
+///         // The macro will keep evaluating this expression repeatedly until
 ///         // the timer times out.
 ///         //
 ///         // We can do anything that returns `Result` here. For this simple
@@ -154,21 +159,32 @@ macro_rules! block_timeout {
 ///         // We could also return an error.
 ///         // Err("This is an error")
 ///     },
-///     |result: ()| {
-///         // will be called by the macro, if the expression returns `Ok`
-///     },
-///     |error: &str| {
+///     // Here's a pseudo-closure with an argument in parentheses, which we can
+///     // name freely, followed by an expression whose return value is ignored.
+///     (result) {
+///         // The macro will evaluate this expression, if the main expression
+///         // above returns `Ok`. `result`, which we've named in the
+///         // parentheses above, will be whatever the contents of the `Ok` are.
+///         let result: () = result;
+///     };
+///     (error) {
 ///         // will be called by the macro, if the expression returns `Err`
-///     },
+///         let error: &'static str = error;
+///     };
 /// );
 /// ```
 #[macro_export]
 macro_rules! repeat_timeout {
-    ($timer:expr, $op:expr, $on_success:expr, $on_error:expr,) => {
+    (
+        $timer:expr,
+        $op:expr,
+        ($result:ident) $on_success:expr;
+        ($error:ident) $on_error:expr;
+    ) => {
         {
             use $crate::embedded_hal::prelude::*;
 
-            // Make sure the timer has the right type. If it isn't, the user
+            // Make sure the timer has the right type. If it hasn't, the user
             // should at least get a good error message.
             fn check_type<T>(_: &mut T)
                 where T: $crate::embedded_hal::timer::CountDown {}
@@ -186,10 +202,12 @@ macro_rules! repeat_timeout {
 
                 match $op {
                     Ok(result) => {
-                        $on_success(result);
+                        let $result = result;
+                        $on_success;
                     }
                     Err(error) => {
-                        $on_error(error);
+                        let $error = error;
+                        $on_error;
                     }
                 }
             }
