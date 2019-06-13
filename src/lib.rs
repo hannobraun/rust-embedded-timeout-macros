@@ -154,17 +154,24 @@ macro_rules! block_timeout {
 ///         // We could also return an error.
 ///         // Err("This is an error")
 ///     },
-///     |result: ()| {
+///     (result) {
 ///         // will be called by the macro, if the expression returns `Ok`
-///     },
-///     |error: &str| {
+///         let result: () = result;
+///     };
+///     (error) {
 ///         // will be called by the macro, if the expression returns `Err`
-///     },
+///         let error: &'static str = error;
+///     };
 /// );
 /// ```
 #[macro_export]
 macro_rules! repeat_timeout {
-    ($timer:expr, $op:expr, $on_success:expr, $on_error:expr,) => {
+    (
+        $timer:expr,
+        $op:expr,
+        ($result:ident) $on_success:expr;
+        ($error:ident) $on_error:expr;
+    ) => {
         {
             use $crate::embedded_hal::prelude::*;
 
@@ -186,10 +193,12 @@ macro_rules! repeat_timeout {
 
                 match $op {
                     Ok(result) => {
-                        $on_success(result);
+                        let $result = result;
+                        $on_success;
                     }
                     Err(error) => {
-                        $on_error(error);
+                        let $error = error;
+                        $on_error;
                     }
                 }
             }
