@@ -8,6 +8,130 @@
 //! This crate defines macros that help working with timeouts on top of
 //! `embedded-hal` APIs.
 //!
+//! # Why Macros?
+//!
+//! A similar result could be achieved using functions and closures, so "Why use
+//! macros for this?" is a fair question. While macros can be confusing and hard
+//! to work with, they are also more powerful. Here are some things you can do
+//! using the macros in this crate, that you couldn't do with a
+//! function/closure-based approach:
+//!
+//! - You can `return` the current function, from within the closure.
+//! - You can `break`/`continue` an outer loop, from within the closure.
+//! - You can rely on the compiler's reasoning to support complicated moves.
+//!
+//! That last point is the least obvious, so it deserves some elaboration. Take
+//! the following example:
+//!
+//! ``` no_run
+//! let mut thing_being_idle = Thing::new();
+//!
+//! loop {
+//!     // `do_stuff` takes ownership of the idle thing and returns a new type
+//!     // that represents the same thing, but no longer being idle and doing
+//!     // stuff.
+//!     let thing_doing_stuff = thing_being_idle.do_stuff();
+//!
+//!     // stuff is being done
+//!
+//!     // `finish_doing_stuff` again takes ownership of the thing, and returns
+//!     // the original type that represents the thing while it's being idle.
+//!     // We move that new idle thing into the original variable.
+//!     //
+//!     // The compiler understands this, so even though we've moved out of
+//!     // `thing_being_idle`, it's going to be available again in the next loop
+//!     // iteration.
+//!     thing_being_idle = thing_doing_stuff.finish_doing_stuff();
+//! }
+//!
+//!
+//! struct Thing<State>(State);
+//!
+//! impl Thing<BeingIdle> {
+//!     fn new() -> Self {
+//!         Thing(BeingIdle)
+//!     }
+//!
+//!     fn do_stuff(self) -> Thing<DoingStuff> {
+//!         // Start doing the important stuff
+//!         // ...
+//!
+//!         Thing(DoingStuff)
+//!     }
+//! }
+//!
+//! impl Thing<DoingStuff> {
+//!     fn finish_doing_stuff(self) -> Thing<BeingIdle> {
+//!         // Finish doing the important stuff
+//!         // ...
+//!
+//!         Thing(BeingIdle)
+//!     }
+//! }
+//!
+//! struct BeingIdle;
+//! struct DoingStuff;
+//! ```
+//!
+//! Since the macros in this crate are basically just fancy loops that don't do
+//! anything complicated, the principle demonstrated above fully applies when
+//! using them.
+//!
+//! Contrast that with a closure-based approach:
+//!
+//! ``` ignore
+//! let mut thing_being_idle = Thing::new();
+//!
+//! loop {
+//!     let closure = || {
+//!         // Since `do_stuff` takes ownership of the idle thing, the whole
+//!         // closure takes ownership. We'll actually get a compiler error
+//!         // here, as the compiler doesn't really understand that the closure
+//!         // also gives this ownership back. See comment below.
+//!         let thing_doing_stuff = thing_being_idle.do_stuff();
+//!
+//!         // stuff is being done
+//!
+//!         // Like in the example above, we try to give ownership back, so we
+//!         // can use the variable again in the next loop iteration. However,
+//!         // the compiler doesn't seem to have a concept of closures giving
+//!         // back ownership, so it won't understand this, and the whole
+//!         // example will not compile.
+//!         thing_being_idle = thing_doing_stuff.finish_doing_stuff();
+//!     };
+//!
+//!     closure();
+//! }
+//!
+//!
+//! # struct Thing<State>(State);
+//! #
+//! # impl Thing<BeingIdle> {
+//! #     fn new() -> Self {
+//! #         Thing(BeingIdle)
+//! #     }
+//! #
+//! #     fn do_stuff(self) -> Thing<DoingStuff> {
+//! #         // Start doing the important stuff
+//! #         // ...
+//! #
+//! #         Thing(DoingStuff)
+//! #     }
+//! # }
+//! #
+//! # impl Thing<DoingStuff> {
+//! #     fn finish_doing_stuff(self) -> Thing<BeingIdle> {
+//! #         // Finish doing the important stuff
+//! #         // ...
+//! #
+//! #         Thing(BeingIdle)
+//! #     }
+//! # }
+//! #
+//! # struct BeingIdle;
+//! # struct DoingStuff;
+//! ```
+//!
 //! [`embedded-hal`]: https://crates.io/crates/embedded-hal
 //! [`nb`]: https://crates.io/crates/nb
 
