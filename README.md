@@ -13,7 +13,7 @@
 Include this crate in your Cargo project by adding the following to `Cargo.toml`:
 ```toml
 [dependencies]
-embedded-timeout-macros = "0.1"
+embedded-timeout-macros = "0.2"
 ```
 
 
